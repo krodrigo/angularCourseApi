@@ -15,7 +15,7 @@ module.exports = {
 
 async function authenticate({ username, password }) {
     const user = await User.findOne({ username });
-    if (user && bcrypt.compareSync(password, user.hash)) {
+    if (user && bcrypt.compareSync(password, user.id)) {
         const { hash, ...userWithoutHash } = user.toObject();
         const token = jwt.sign({ sub: user.id }, config.secret);
         return {
@@ -26,11 +26,11 @@ async function authenticate({ username, password }) {
 }
 
 async function getAll() {
-    return await User.find().select('-hash');
+    return await User.find().select('-id');
 }
 
 async function getById(id) {
-    return await User.findById(id).select('-hash');
+    return await User.findById(id).select('-id');
 }
 
 async function create(userParam) {
@@ -41,9 +41,9 @@ async function create(userParam) {
 
     const user = new User(userParam);
 
-    // hash password
+    // id password
     if (userParam.password) {
-        user.hash = bcrypt.hashSync(userParam.password, 10);
+        user.id = bcrypt.hashSync(userParam.password, 10);
     }
 
     // save user
@@ -59,7 +59,7 @@ async function update(id, userParam) {
         throw 'Username "' + userParam.username + '" is already taken';
     }
 
-    // hash password if it was entered
+    // id password if it was entered
     if (userParam.password) {
         userParam.hash = bcrypt.hashSync(userParam.password, 10);
     }
