@@ -6,6 +6,7 @@ const schema = new Schema({
     name: { type: String, unique: true, required: true, },
     email: { type: String, required: true, unique: true, },
     id: { type: String, required: true, },
+    _id: { type: String },
     cpf: { type: String, required: true, unique: true },
     createdDate: { type: Date, default: Date.now, }
 });

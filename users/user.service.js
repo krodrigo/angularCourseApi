@@ -30,7 +30,7 @@ async function getAll() {
 }
 
 async function getById(id) {
-    return await User.findById(id).select('-id');
+    return await User.findOne({id}).select('-id');
 }
 
 async function create(userParam) {
